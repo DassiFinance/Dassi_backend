@@ -30,22 +30,22 @@ var userSchema = new Schema(
     walletId: {
       type: String,
     },
-    totalAmtLent: {
+    totalAmountLent: {
       type: Number,
       required: true,
       default: 0,
     },
-    totalAmtBorrowed: {
+    totalAmountBorrowed: {
       type: Number,
       required: true,
       default: 0,
     },
-    noOfLoansApplied: {
+    numberOfLoansApplied: {
       type: Number,
       required: true,
       default: 0,
     },
-    noOfLoansSupported: {
+    numberOfLoansSupported: {
       type: Number,
       required: true,
       default: 0,

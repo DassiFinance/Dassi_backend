@@ -8,11 +8,17 @@ const lenderSchema = new mongoose.Schema(
     },
     loans: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Loan",
+        loanId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Loan",
+        },
+        amount: {
+          type: Number,
+          required: true,
+        },
       },
     ],
-    Cart: [
+    cart: [
       {
         loan: {
           type: mongoose.Schema.Types.ObjectId,

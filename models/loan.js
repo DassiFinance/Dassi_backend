@@ -12,8 +12,14 @@ const loanSchema = new mongoose.Schema(
     },
     contributors: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Contributor",
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: " User",
+        },
+        amount: {
+          type: Number,
+          required: true,
+        },
       },
     ],
   },
