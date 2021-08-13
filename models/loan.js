@@ -5,6 +5,7 @@ const loanSchema = new mongoose.Schema(
     borrowerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     loanDetails: {
       type: mongoose.Schema.Types.ObjectId,

@@ -17,11 +17,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Importing routes
-const borrowerRouter = require("./routes/Borrower");
+const userRouter = require("./routes/user");
+const borrowerRouter = require("./routes/borrower");
+const loanRouter = require("./routes/loan");
 
 // REGISTER OUR ROUTES
 // all of our routes will be prefixed with /api
+app.use("/api/user", userRouter);
 app.use("/api/borrower", borrowerRouter);
+app.use("/api/loan", loanRouter);
 
 // START THE SERVER
 const port = process.env.PORT || 8080;
