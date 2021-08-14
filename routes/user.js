@@ -8,6 +8,8 @@ const authController = require("../controllers/user");
 // Needs to be changes acc to data from oAuth
 router.post("/register", authController.register);
 router.post("/login", authController.login);
+router.post("/user/profile/:id", authController.getProfile);
+
 router.post("/userInfo", (req, res) => {
   User.create(req.body)
     .then((response) => {

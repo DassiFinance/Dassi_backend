@@ -26,7 +26,6 @@ exports.register = async (req, res, next) => {
             .save()
             .then((result) => {
               return res.status(201).json({
-                message: "New User Created",
                 token,
                 result,
               });
@@ -54,7 +53,7 @@ exports.login = async (req, res, next) => {
     .then((user) => {
       if (!user) {
         return res.status(401).json({
-          msg: "User email not found.",
+          message: "User email not found.",
         });
       } else {
         bcrypt
@@ -62,7 +61,7 @@ exports.login = async (req, res, next) => {
           .then((isMatch) => {
             if (!isMatch) {
               return res.status(401).json({
-                msg: "User password didn't match.",
+                message: "User password didn't match.",
               });
             }
             const token = jwt.sign(
@@ -90,4 +89,12 @@ exports.login = async (req, res, next) => {
         error: "Auth failed",
       });
     });
+};
+exports.getProfile = async (res, req) => {
+  const id = req.params.id;
+  User.findById(id)
+    .then((user) => {
+      return res.json(user);
+    })
+    .catch((err) => res.status(400).json("Error : " + err));
 };
