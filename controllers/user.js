@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { jwtExpiresIn, jwtSecret } = require("../config/keys");
 
 exports.register = async (req, res, next) => {
   const { email } = req.body;
@@ -15,19 +16,15 @@ exports.register = async (req, res, next) => {
             password: hashedPassword,
           });
 
-          const token = jwt.sign(
-            { email: req.body.email },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: process.env.JWT_EXPIRES_IN,
-            }
-          );
+          const token = jwt.sign({ email: req.body.email }, jwtSecret, {
+            expiresIn: jwtExpiresIn,
+          });
           newUser
             .save()
             .then((result) => {
               return res.status(201).json({
                 token,
-                result,
+                user: result,
               });
             })
             .catch((e) => {
@@ -64,13 +61,9 @@ exports.login = async (req, res, next) => {
                 message: "User password didn't match.",
               });
             }
-            const token = jwt.sign(
-              { email: req.body.email },
-              process.env.JWT_SECRET,
-              {
-                expiresIn: process.env.JWT_EXPIRES_IN,
-              }
-            );
+            const token = jwt.sign({ email: req.body.email }, jwtSecret, {
+              expiresIn: jwtExpiresIn,
+            });
             return res.status(200).json({
               token: token,
             });
