@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { jwtExpiresIn, jwtSecret } = require("../config/keys");
 
+/**
+ *  Creates a new User
+ */
 exports.register = async (req, res, next) => {
   const { email } = req.body;
   User.findOne({ email })
@@ -45,6 +48,9 @@ exports.register = async (req, res, next) => {
     });
 };
 
+/**
+ *  Login User
+ */
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
   User.findOne({ email })
@@ -82,5 +88,18 @@ exports.login = async (req, res, next) => {
       return res.status(500).json({
         error: "Auth failed",
       });
+    });
+};
+
+/**
+ * Searches user by Id
+ */
+exports.userProfile = async (req, res, next) => {
+  User.findById(req.params.id)
+    .then((response) => {
+      res.send(response);
+    })
+    .catch((error) => {
+      res.status(401).send({ error, message: "User not found" });
     });
 };
