@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { jwtExpiresIn, jwtSecret } = require("../config/keys");
 
+/**
+ *  Creates a new User
+ */
 exports.register = async (req, res, next) => {
   const { email } = req.body;
   User.findOne({ email })
@@ -23,6 +26,7 @@ exports.register = async (req, res, next) => {
             .save()
             .then((result) => {
               return res.status(201).json({
+                message: "New User Created",
                 token,
                 user: result,
               });
@@ -44,13 +48,16 @@ exports.register = async (req, res, next) => {
     });
 };
 
+/**
+ *  Login User
+ */
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;
   User.findOne({ email })
     .then((user) => {
       if (!user) {
         return res.status(401).json({
-          message: "User email not found.",
+          msg: "User email not found.",
         });
       } else {
         bcrypt
@@ -58,7 +65,7 @@ exports.login = async (req, res, next) => {
           .then((isMatch) => {
             if (!isMatch) {
               return res.status(401).json({
-                message: "User password didn't match.",
+                msg: "User password didn't match.",
               });
             }
             const token = jwt.sign({ email: req.body.email }, jwtSecret, {
@@ -111,5 +118,7 @@ exports.getProfile = async (req, res) => {
     .then((user) => {
       return res.json(user);
     })
-    .catch((err) => res.status(400).json("Error : " + err));
+    .catch((error) => {
+      res.status(401).send({ error, message: "User not found" });
+    });
 };
