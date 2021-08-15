@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { jwtSecret } = require("../config/constants");
+const { jwtSecret } = require("../config/keys");
 
 exports.createJwt = async (obj) => {
   return jwt.sign(obj, jwtSecret, { expiresIn: 86400 });
