@@ -8,7 +8,8 @@ const authController = require("../controllers/user");
 // Needs to be changes acc to data from oAuth
 router.post("/register", authController.register);
 router.post("/login", authController.login);
-router.post("/user/profile/:id", authController.getProfile);
+router.get("/profile/:id", authController.getProfile);
+router.post("/userDetails", authController.addUserDetails);
 
 router.post("/userInfo", (req, res) => {
   User.create(req.body)
@@ -17,19 +18,6 @@ router.post("/userInfo", (req, res) => {
     })
     .catch((error) => {
       res.status(409).send({ error, message: "User already exists" });
-    });
-});
-
-/**
- * Get user by Id
- */
-router.get("/profile/:id", (req, res) => {
-  User.findById(req.params.id)
-    .then((response) => {
-      res.send(response);
-    })
-    .catch((error) => {
-      res.status(401).send({ error, message: "User not found" });
     });
 });
 

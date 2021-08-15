@@ -83,7 +83,29 @@ exports.login = async (req, res, next) => {
       });
     });
 };
-exports.getProfile = async (res, req) => {
+
+exports.addUserDetails = async (req, res) => {
+  console.log(req.body);
+
+  User.findById(req.body.id)
+    .then((user) => {
+      (user.username = req.body.username),
+        (user.phone = req.body.phone),
+        (user.occupation = req.body.occupation),
+        (user.address.city = req.body.address.city),
+        (user.address.state = req.body.address.state),
+        (user.address.country = req.body.address.country),
+        (user.address.pincode = req.body.address.pincode);
+      return res.status(200).json({
+        user,
+        message: "Details added successfully",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+exports.getProfile = async (req, res) => {
   const id = req.params.id;
   User.findById(id)
     .then((user) => {
