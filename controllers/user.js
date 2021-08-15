@@ -75,12 +75,12 @@ exports.login = async (req, res, next) => {
   }
 };
 
-
+/**
+ * Used to add required user details
+ */
 exports.addUserDetails = async (req, res) => {
-  console.log(req.body);
-
-  User.findById(req.body.id)
-    .then((user) => {
+  try {
+    User.findById(req.body.id).then((user) => {
       (user.username = req.body.username),
         (user.phone = req.body.phone),
         (user.occupation = req.body.occupation),
@@ -88,14 +88,16 @@ exports.addUserDetails = async (req, res) => {
         (user.address.state = req.body.address.state),
         (user.address.country = req.body.address.country),
         (user.address.pincode = req.body.address.pincode);
+
+      user.save();
       return res.status(200).json({
         user,
         message: "Details added successfully",
       });
-    })
-    .catch((err) => {
-      console.log(err);
     });
+  } catch (error) {
+    res.status(400).send({ error, message: "Couldn't add user details" });
+  }
 };
 
 /**
@@ -110,4 +112,3 @@ exports.userProfile = async (req, res, next) => {
     res.status(401).send({ error, message: "User not found" });
   }
 };
-
