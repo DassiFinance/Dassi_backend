@@ -7,9 +7,9 @@ const { jwtExpiresIn, jwtSecret } = require("../config/keys");
  *  Creates a new User
  */
 exports.register = async (req, res, next) => {
-  const { email } = req.body;
-  User.findOne({ email })
-    .then((user) => {
+  try {
+    const { email } = req.body;
+    User.findOne({ email }).then((user) => {
       if (user) {
         return res.status(400).send({ message: "User already exists" });
       } else {
@@ -19,87 +19,71 @@ exports.register = async (req, res, next) => {
             password: hashedPassword,
           });
 
-          const token = jwt.sign({ email: req.body.email }, jwtSecret, {
+          const token = jwt.sign({ _id: newUser._id }, jwtSecret, {
             expiresIn: jwtExpiresIn,
           });
-          newUser
-            .save()
-            .then((result) => {
-              return res.status(201).json({
-                message: "New User Created",
-                token,
-                user: result,
-              });
-            })
-            .catch((e) => {
-              console.log(e);
-              return res.status(500).json({
-                error: e,
-              });
+          newUser.save().then((result) => {
+            return res.status(201).json({
+              message: "New User Created",
+              token,
+              user: result,
             });
+          });
         });
       }
-    })
-    .catch((e) => {
-      console.log(e);
-      return res.status(500).json({
-        error: "Unable to create new User",
-      });
     });
+  } catch (error) {
+    return res.status(500).json({
+      error,
+      message: "Unable to create new User",
+    });
+  }
 };
 
 /**
  *  Login User
  */
 exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
-  User.findOne({ email })
-    .then((user) => {
+  try {
+    const { email, password } = req.body;
+    User.findOne({ email }).then((user) => {
       if (!user) {
         return res.status(401).json({
-          msg: "User email not found.",
+          message: "User email not found.",
         });
       } else {
-        bcrypt
-          .compare(password, user.password)
-          .then((isMatch) => {
-            if (!isMatch) {
-              return res.status(401).json({
-                msg: "User password didn't match.",
-              });
-            }
-            const token = jwt.sign({ email: req.body.email }, jwtSecret, {
-              expiresIn: jwtExpiresIn,
+        bcrypt.compare(password, user.password).then((isMatch) => {
+          if (!isMatch) {
+            return res.status(401).json({
+              message: "User password didn't match.",
             });
-            return res.status(200).json({
-              token: token,
-            });
-          })
-          .catch((e) => {
-            console.log(e);
-            return res.status(500).json({
-              error: e,
-            });
+          }
+          const token = jwt.sign({ _id: user._id }, jwtSecret, {
+            expiresIn: jwtExpiresIn,
           });
+          return res.status(200).json({
+            token: token,
+          });
+        });
       }
-    })
-    .catch((e) => {
-      console.log(e);
-      return res.status(500).json({
-        error: "Auth failed",
-      });
     });
+  } catch (error) {
+    return res.status(500).json({
+      error,
+      message: "Auth failed",
+    });
+  }
 };
 
 /**
  * Searches user by Id
  */
 exports.userProfile = async (req, res, next) => {
-  User.findById(req.params.id)
-    .then((response) => {
+  try {
+    User.findById(req.params.id).then((response) => {
       res.send(response);
-    })
-    .catch((error) => {
-      res.status(401).send({ error, message: "User not found" });
     });
+  } catch (error) {
+    res.status(401).send({ error, message: "User not found" });
+  }
 };
