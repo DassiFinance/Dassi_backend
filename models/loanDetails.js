@@ -6,7 +6,7 @@ const loanDetailsSchema = new mongoose.Schema({
     required: true,
   },
   timePeriod: {
-    type: Number,
+    type: String,
     required: true,
   },
   description: {
