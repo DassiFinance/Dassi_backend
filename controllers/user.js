@@ -80,21 +80,32 @@ exports.login = async (req, res, next) => {
  */
 exports.addUserDetails = async (req, res) => {
   try {
-    User.findById(req.body.id).then((user) => {
-      (user.username = req.body.username),
-        (user.phone = req.body.phone),
-        (user.occupation = req.body.occupation),
-        (user.address.city = req.body.address.city),
-        (user.address.state = req.body.address.state),
-        (user.address.country = req.body.address.country),
-        (user.address.pincode = req.body.address.pincode);
+    const schemaProperties = Object.keys(User.schema.paths);
+    const requestKeys = Object.keys(req.body);
+    const requestValues = Object.values(req.body);
+    const updateQuery = {};
 
-      user.save();
-      return res.status(200).json({
-        user,
-        message: "Details added successfully",
-      });
-    });
+    for (let i = 0; i < requestKeys.length; i++) {
+      // Only update valid fields according to User Schema
+      if (schemaProperties.includes(requestKeys[i])) {
+        updateQuery[requestKeys[i]] = requestValues[i];
+      }
+    }
+
+    User.findOneAndUpdate(
+      { _id: req.user._id },
+      { $set: updateQuery },
+      { new: true },
+      (error, updatedObject) => {
+        if (error) {
+          return res.send({ error, message: "Couldn't add user details" });
+        }
+        return res.send({
+          user: updatedObject,
+          message: "Details added successfully",
+        });
+      }
+    );
   } catch (error) {
     res.status(400).send({ error, message: "Couldn't add user details" });
   }

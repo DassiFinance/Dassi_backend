@@ -1,14 +1,9 @@
-const router = require("express").Router();
-const Borrower = require("../models/borrower");
+const router = require("express").Router(); // get an instance of the express Router
+const controller = require("../controllers/borrower");
+const asyncHandler = require("express-async-handler");
+const { authRequired } = require("../middleware/auth");
 
-router.post("/create", (req, res) => {
-  Borrower.create(req.body)
-    .then((response) => {
-      res.send(response);
-    })
-    .catch((error) => {
-      res.send({ error, message: "Borrower already exists" });
-    });
-});
+// router.post("/create", authRequired, asyncHandler(controller.createBorrower));
+// router.post("/userDetails", controller.addUserDetails);
 
 module.exports = router;
