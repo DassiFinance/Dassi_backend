@@ -105,7 +105,7 @@ exports.addUserDetails = async (req, res) => {
  */
 exports.userProfile = async (req, res, next) => {
   try {
-    User.findById(req.params.id).then((response) => {
+    User.findById(req.user._id).then((response) => {
       res.send(response);
     });
   } catch (error) {

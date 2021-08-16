@@ -5,7 +5,7 @@ const { authRequired } = require("../middleware/auth");
 
 router.post("/register", controller.register);
 router.post("/login", controller.login);
-router.get("/profile/:id", authRequired, asyncHandler(controller.userProfile));
+router.get("/profile/", authRequired, asyncHandler(controller.userProfile));
 router.post("/userDetails", controller.addUserDetails);
 
 module.exports = router;
