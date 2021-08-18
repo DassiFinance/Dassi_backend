@@ -5,12 +5,20 @@ const loanDetailsSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  timePeriod: {
+  duration: {
     type: String,
     required: true,
   },
   description: {
     type: String,
+    required: true,
+  },
+  emiRepetition: {
+    type: String,
+    required: true,
+  },
+  repaymentStartDate: {
+    type: Date,
     required: true,
   },
   photo: {

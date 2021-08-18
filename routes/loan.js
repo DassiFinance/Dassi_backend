@@ -10,5 +10,6 @@ router.post(
   upload.single("photo"),
   asyncHandler(loanController.createLoan)
 );
+router.get("/activeLoans", loanController.displayActiveLoans);
 
 module.exports = router;

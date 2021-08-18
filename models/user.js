@@ -27,6 +27,12 @@ var userSchema = new Schema(
     occupation: {
       type: String,
     },
+    income: {
+      type: Number,
+    },
+    bio: {
+      type: String,
+    },
     walletId: {
       type: String,
     },

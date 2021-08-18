@@ -9,7 +9,7 @@ const loanSchema = new mongoose.Schema(
     },
     loanDetails: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: " LoanDetails",
+      ref: "LoanDetails",
     },
     contributors: [
       {
