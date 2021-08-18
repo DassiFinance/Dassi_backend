@@ -13,8 +13,8 @@ const loanDetailsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  photoUrl: {
-    type: String,
+  photo: {
+    type: Buffer,
   },
   category: {
     type: String,
