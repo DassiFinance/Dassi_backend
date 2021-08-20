@@ -45,7 +45,8 @@ exports.createLoan = async (req, res) => {
 exports.displayActiveLoans = async (req, res, next) => {
   try {
     Loan.find()
-      .populate("loanDetails")
+      .select("-createdAt -updatedAt -__v")
+      .populate("loanDetails", "-_id -photo -__v")
       .then((loans) => res.json(loans));
   } catch (error) {
     res.status(400).json({ error, message: "Could not get active loans" });
@@ -54,19 +55,18 @@ exports.displayActiveLoans = async (req, res, next) => {
 
 exports.getLoanPhoto = async (req, res, next) => {
   try {
-    const loan = await Loan.findById(req.params.loanId);
-    if (!loan || !loan.loanDetails) {
-      res.status(404).send({ message: "Could not find loan image" });
-    }
-    const loanDetails = await LoanDetails.findById(loan.loanDetails);
-    if (!loanDetails || !loanDetails.photo) {
-      res.status(404).send({ message: "Could not find loan image" });
-    }
-    res.set("Content-Type", "image/jpg");
-    res.send(loanDetails.photo);
+    Loan.findById(req.params.loanId)
+      .populate("loanDetails", "photo")
+      .then((result) => {
+        res.set("Content-Type", "image/jpg");
+        return res.send(result.loanDetails.photo);
+      })
+      .catch((error) => {
+        return res.send({ error, message: "Could not find loan image" });
+      });
   } catch (error) {
     return res
-      .status(500)
+      .status(404)
       .send({ error, message: "Could not find loan image" });
   }
 };
