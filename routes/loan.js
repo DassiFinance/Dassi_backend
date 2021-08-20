@@ -11,5 +11,6 @@ router.post(
   asyncHandler(loanController.createLoan)
 );
 router.get("/activeLoans", loanController.displayActiveLoans);
+router.get("/loanPhoto/:loanId", loanController.getLoanPhoto);
 
 module.exports = router;

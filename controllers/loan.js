@@ -48,6 +48,25 @@ exports.displayActiveLoans = async (req, res, next) => {
       .populate("loanDetails")
       .then((loans) => res.json(loans));
   } catch (error) {
-    res.status(400).json("Error : " + err);
+    res.status(400).json({ error, message: "Could not get active loans" });
+  }
+};
+
+exports.getLoanPhoto = async (req, res, next) => {
+  try {
+    const loan = await Loan.findById(req.params.loanId);
+    if (!loan || !loan.loanDetails) {
+      res.status(404).send({ message: "Could not find loan image" });
+    }
+    const loanDetails = await LoanDetails.findById(loan.loanDetails);
+    if (!loanDetails || !loanDetails.photo) {
+      res.status(404).send({ message: "Could not find loan image" });
+    }
+    res.set("Content-Type", "image/jpg");
+    res.send(loanDetails.photo);
+  } catch (error) {
+    return res
+      .status(500)
+      .send({ error, message: "Could not find loan image" });
   }
 };
