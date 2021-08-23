@@ -7,10 +7,6 @@ const loanSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    loanDetails: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "LoanDetails",
-    },
     contributors: [
       {
         userId: {
@@ -23,6 +19,38 @@ const loanSchema = new mongoose.Schema(
         },
       },
     ],
+    category: {
+      required: true,
+      type: String,
+    },
+    loanAmount: {
+      type: Number,
+      required: true,
+    },
+    amountLeft: {
+      type: Number,
+      required: true,
+    },
+    duration: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    emiRepetition: {
+      type: String,
+      required: true,
+    },
+    repaymentStartDate: {
+      type: Date,
+      required: true,
+    },
+    photo: {
+      type: Buffer,
+      required: true,
+    },
   },
   { timestamps: true }
 );

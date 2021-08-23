@@ -12,7 +12,9 @@ exports.createCategory = async (req, res, next) => {
 
 exports.getCategories = async (req, res, next) => {
   try {
-    const categories = await Category.find();
+    const categories = await Category.find().select(
+      "-createdAt -updatedAt -__v"
+    );
     return res.send(categories);
   } catch (error) {
     return res.send({ error, message: "Could not get categories" });
