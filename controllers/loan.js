@@ -8,7 +8,7 @@ exports.createLoan = async (req, res) => {
     const newLoan = new Loan({
       borrowerId: borrower._id,
       loanAmount: reqLoanDetails.loanAmount,
-      amountLeft: reqLoanDetails.amountLeft,
+      amountLeft: reqLoanDetails.loanAmount,
       duration: reqLoanDetails.duration,
       description: reqLoanDetails.description,
       repaymentStartDate: reqLoanDetails.repaymentStartDate,
