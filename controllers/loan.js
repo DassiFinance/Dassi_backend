@@ -70,3 +70,16 @@ exports.getLoanPhoto = async (req, res, next) => {
       .send({ error, message: "Could not find loan image" });
   }
 };
+exports.getLoanById = async (req, res) => {
+  try {
+    Loan.findById(req.params.loanId)
+      .select("-photo -createdAt -updatedAt -__v")
+      .then((loan) => {
+        return res.json(loan);
+      });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ error, message: "Could not get the requested loan" });
+  }
+};

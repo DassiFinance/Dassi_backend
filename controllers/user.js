@@ -2,7 +2,6 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { jwtExpiresIn, jwtSecret } = require("../config/keys");
-
 /**
  *  Creates a new User
  */
@@ -104,7 +103,6 @@ exports.login = async (req, res, next) => {
     });
   }
 };
-
 /**
  * Used to add required user details
  */
@@ -140,7 +138,6 @@ exports.addUserDetails = async (req, res) => {
     res.status(400).send({ error, message: "Couldn't add user details" });
   }
 };
-
 /**
  * Searches user by Id
  */

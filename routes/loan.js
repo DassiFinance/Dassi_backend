@@ -16,5 +16,6 @@ router.get(
 );
 router.get("/activeLoans/", loanController.displayActiveLoans);
 router.get("/loanPhoto/:loanId", loanController.getLoanPhoto);
+router.get("/reqLoan/:loanId", loanController.getLoanById);
 
 module.exports = router;
