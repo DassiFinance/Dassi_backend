@@ -57,10 +57,9 @@ exports.displayActiveLoansWithFilter = async (req, res, next) => {
 exports.getLoanPhoto = async (req, res, next) => {
   try {
     Loan.findById(req.params.loanId)
-      .populate("loanDetails", "photo")
       .then((result) => {
         res.set("Content-Type", "image/jpg");
-        return res.send(result.loanDetails.photo);
+        return res.send(result.photo);
       })
       .catch((error) => {
         return res.send({ error, message: "Could not find loan image" });
