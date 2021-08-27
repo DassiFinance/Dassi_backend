@@ -52,6 +52,11 @@ const loanSchema = new mongoose.Schema(
       type: Buffer,
       required: true,
     },
+    repaid: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   { timestamps: true }
 );
