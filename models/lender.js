@@ -9,6 +9,7 @@ const lenderSchema = new mongoose.Schema(
     loans: [
       {
         loanId: {
+          unique: true,
           type: mongoose.Schema.Types.ObjectId,
           ref: "Loan",
         },
@@ -18,15 +19,15 @@ const lenderSchema = new mongoose.Schema(
         },
       },
     ],
-    cart: [
-      {
-        loan: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Loan",
-        },
-        amount: Number,
-      },
-    ],
+    // cart: [
+    //   {
+    //     loan: {
+    //       type: mongoose.Schema.Types.ObjectId,
+    //       ref: "Loan",
+    //     },
+    //     amount: Number,
+    //   },
+    // ],
   },
   { timestamps: true }
 );

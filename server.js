@@ -19,6 +19,7 @@ app.use(bodyParser.json());
 // Importing routes
 const userRouter = require("./routes/user");
 const borrowerRouter = require("./routes/borrower");
+const lenderRouter = require("./routes/lender");
 const loanRouter = require("./routes/loan");
 const categoryRouter = require("./routes/category");
 
@@ -26,6 +27,7 @@ const categoryRouter = require("./routes/category");
 // all of our routes will be prefixed with /api
 app.use("/api/user", userRouter);
 app.use("/api/borrower", borrowerRouter);
+app.use("/api/lender", lenderRouter);
 app.use("/api/loan", loanRouter);
 app.use("/api/category", categoryRouter);
 
