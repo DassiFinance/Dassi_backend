@@ -100,17 +100,14 @@ exports.repaidLoans = async (req, res, next) => {
       });
 
     let actuallyRepaidLoans = [];
-    repaidLoans.loans.forEach((loan) => {
-      if (loan.loanId !== null) {
-        actuallyRepaidLoans.push(loan);
-      }
-    });
-
-    if (actuallyRepaidLoans) {
-      return res.send(actuallyRepaidLoans);
-    } else {
-      return res.send([]);
+    if (repaidLoans) {
+      repaidLoans.loans.forEach((loan) => {
+        if (loan.loanId !== null) {
+          actuallyRepaidLoans.push(loan);
+        }
+      });
     }
+    return res.send(actuallyRepaidLoans);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
