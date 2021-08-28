@@ -1,5 +1,7 @@
 const { createLenderHelper } = require("../helpers/lender");
 const Loan = require("../models/loan");
+const Lender = require("../models/lender");
+const lodash = require("lodash");
 
 /**
  *  Creates a new Lender or returns existing lender
@@ -80,6 +82,40 @@ exports.lendAmount = async (req, res, next) => {
     return res.status(500).json({
       error,
       message: "Unable to lend at the moment",
+    });
+  }
+};
+
+/**
+ * Returns all the loans that are repaid
+ */
+exports.repaidLoans = async (req, res, next) => {
+  try {
+    const repaidLoans = await Lender.findOne({ userId: req.user._id })
+      .select("loans -_id")
+      .populate({
+        path: "loans.loanId",
+        match: { repaid: true },
+        select: "-photo -createdAt -updatedAt -__v -contributors",
+      });
+
+    let actuallyRepaidLoans = [];
+    repaidLoans.loans.forEach((loan) => {
+      if (loan.loanId !== null) {
+        actuallyRepaidLoans.push(loan);
+      }
+    });
+
+    if (actuallyRepaidLoans) {
+      return res.send(actuallyRepaidLoans);
+    } else {
+      return res.send([]);
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error,
+      message: "Unable to fetch raised loans",
     });
   }
 };

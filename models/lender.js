@@ -9,7 +9,6 @@ const lenderSchema = new mongoose.Schema(
     loans: [
       {
         loanId: {
-          unique: true,
           type: mongoose.Schema.Types.ObjectId,
           ref: "Loan",
         },

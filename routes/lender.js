@@ -5,5 +5,10 @@ const { authRequired } = require("../middleware/auth");
 
 router.post("/create", authRequired, asyncHandler(controller.createLender));
 router.post("/lend", authRequired, asyncHandler(controller.lendAmount));
+router.get(
+  "/fundedLoans/repaid/",
+  authRequired,
+  asyncHandler(controller.repaidLoans)
+);
 
 module.exports = router;
