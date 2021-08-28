@@ -10,5 +10,10 @@ router.get(
   authRequired,
   asyncHandler(controller.repaidLoans)
 );
+router.get(
+  "/fundedLoans/fundraisingInProgress/",
+  authRequired,
+  asyncHandler(controller.fundRaisingInProgress)
+);
 
 module.exports = router;

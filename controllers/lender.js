@@ -46,6 +46,7 @@ exports.lendAmount = async (req, res, next) => {
     }
 
     loan.amountLeft -= req.body.amount;
+    req.user.totalAmountLent += req.body.amount;
     //Check if user has already contributed towards this loan
     let existingLender = false;
     for (let i = 0; i < loan.contributors.length; i++) {
@@ -58,6 +59,7 @@ exports.lendAmount = async (req, res, next) => {
     }
 
     if (existingLender) {
+      await req.user.save();
       lender.loans.find(async (loan, i) => {
         if (loan.loanId.equals(req.body.loanId)) {
           lender.loans[i].amount += req.body.amount;
@@ -66,6 +68,8 @@ exports.lendAmount = async (req, res, next) => {
         }
       });
     } else {
+      req.user.numberOfLoansSupported++;
+      await req.user.save();
       lender.loans.push({ loanId: loan._id, amount: req.body.amount });
       await lender.save();
       loan.contributors.push({ userId: req.user._id, amount: req.body.amount });
@@ -91,7 +95,7 @@ exports.lendAmount = async (req, res, next) => {
  */
 exports.repaidLoans = async (req, res, next) => {
   try {
-    const repaidLoans = await Lender.findOne({ userId: req.user._id })
+    const lendedLoans = await Lender.findOne({ userId: req.user._id })
       .select("loans -_id")
       .populate({
         path: "loans.loanId",
@@ -99,15 +103,15 @@ exports.repaidLoans = async (req, res, next) => {
         select: "-photo -createdAt -updatedAt -__v -contributors",
       });
 
-    let actuallyRepaidLoans = [];
-    if (repaidLoans) {
-      repaidLoans.loans.forEach((loan) => {
+    let repaidLoans = [];
+    if (lendedLoans) {
+      lendedLoans.loans.forEach((loan) => {
         if (loan.loanId !== null) {
-          actuallyRepaidLoans.push(loan);
+          repaidLoans.push(loan);
         }
       });
     }
-    return res.send(actuallyRepaidLoans);
+    return res.send(repaidLoans);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -120,25 +124,25 @@ exports.repaidLoans = async (req, res, next) => {
 /**
  * Returns all the loans that are repaid
  */
-exports.repaidLoans = async (req, res, next) => {
+exports.fundRaisingInProgress = async (req, res, next) => {
   try {
-    const repaidLoans = await Lender.findOne({ userId: req.user._id })
+    const lendedLoans = await Lender.findOne({ userId: req.user._id })
       .select("loans -_id")
       .populate({
         path: "loans.loanId",
-        match: { repaid: true },
+        match: { amountLeft: { $gt: 0 } },
         select: "-photo -createdAt -updatedAt -__v -contributors",
       });
 
-    let actuallyRepaidLoans = [];
-    if (repaidLoans) {
-      repaidLoans.loans.forEach((loan) => {
+    let fundraisingInProgress = [];
+    if (lendedLoans) {
+      lendedLoans.loans.forEach((loan) => {
         if (loan.loanId !== null) {
-          actuallyRepaidLoans.push(loan);
+          fundraisingInProgress.push(loan);
         }
       });
     }
-    return res.send(actuallyRepaidLoans);
+    return res.send(fundraisingInProgress);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
