@@ -4,5 +4,6 @@ const asyncHandler = require("express-async-handler");
 const { authRequired } = require("../middleware/auth");
 
 router.post("/create", authRequired, asyncHandler(controller.createBorrower));
+router.get("/myLoans", authRequired, asyncHandler(controller.myLoans));
 
 module.exports = router;
