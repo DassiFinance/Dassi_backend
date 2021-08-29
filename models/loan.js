@@ -10,6 +10,7 @@ const loanSchema = new mongoose.Schema(
     contributors: [
       {
         userId: {
+          unique: true,
           type: mongoose.Schema.Types.ObjectId,
           ref: " User",
         },
@@ -50,6 +51,11 @@ const loanSchema = new mongoose.Schema(
     photo: {
       type: Buffer,
       required: true,
+    },
+    repaid: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
   },
   { timestamps: true }
