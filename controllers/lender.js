@@ -80,6 +80,7 @@ exports.lendAmount = async (req, res, next) => {
       amountLeft: loan.amountLeft,
       loanContributors: loan.contributors,
       lendersContributions: lender.loans,
+      message: "Payment Successful",
     });
   } catch (error) {
     console.log(error);
