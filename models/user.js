@@ -3,34 +3,34 @@ const { Schema } = mongoose;
 
 var userSchema = new Schema(
   {
-    username: {
+    fullName: {
       type: String,
-    },
-    password: {
-      type: String,
-      required: true,
     },
     email: {
       type: String,
       required: true,
       unique: true,
     },
-    phone: {
+    password: {
       type: String,
+      required: true,
     },
-    address: {
-      city: String,
-      state: String,
-      country: String,
-      pincode: String,
+    zipcode: {
+      type: Number,
     },
-    occupation: {
+    bio: {
       type: String,
     },
     income: {
       type: Number,
     },
-    bio: {
+    occupation: {
+      type: String,
+    },
+    idNumber: {
+      type: String,
+    },
+    idDoc: {
       type: String,
     },
     walletId: {
