@@ -11,7 +11,7 @@ exports.register = async (req, res, next) => {
     User.findOne({ email })
       .then((user) => {
         if (user) {
-          return res.status(400).send({ message: "User already exists" });
+          return res.status(400).send({ error: "User already exists" });
         } else {
           bcrypt
             .hash(req.body.password, 8)
@@ -49,7 +49,7 @@ exports.register = async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({
       error,
-      message: "Unable to create new User",
+      error: "Unable to create new User",
     });
   }
 };
@@ -64,7 +64,7 @@ exports.login = async (req, res, next) => {
       .then((user) => {
         if (!user) {
           return res.status(401).json({
-            message: "User email not found.",
+            error: "User email not found.",
           });
         } else {
           bcrypt
@@ -72,7 +72,7 @@ exports.login = async (req, res, next) => {
             .then((isMatch) => {
               if (!isMatch) {
                 return res.status(401).json({
-                  message: "User password didn't match.",
+                  error: "User password didn't match.",
                 });
               }
               const token = jwt.sign({ _id: user._id }, jwtSecret, {
@@ -98,8 +98,7 @@ exports.login = async (req, res, next) => {
       });
   } catch (error) {
     return res.status(500).json({
-      error,
-      message: "Auth failed",
+      error: "Auth failed",
     });
   }
 };
