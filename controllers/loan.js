@@ -1,4 +1,5 @@
 const Loan = require("../models/loan");
+const User = require("../models/user");
 const { createBorrowerHelper } = require("../helpers/borrower");
 
 exports.createLoan = async (req, res) => {
@@ -6,7 +7,7 @@ exports.createLoan = async (req, res) => {
     const reqLoanDetails = req.body;
     const borrower = await createBorrowerHelper(req.user._id);
     const newLoan = new Loan({
-      borrowerId: borrower._id,
+      userId: req.user._id,
       loanAmount: reqLoanDetails.loanAmount,
       amountLeft: reqLoanDetails.loanAmount,
       duration: reqLoanDetails.duration,
@@ -74,7 +75,12 @@ exports.getLoanById = async (req, res) => {
   try {
     Loan.findById(req.params.loanId)
       .select("-photo -createdAt -updatedAt -__v")
-      .then((loan) => {
+      .lean()
+      .then(async (loan) => {
+        const user = await User.findById(loan.userId)
+          .select("fullName income occupation bio")
+          .lean();
+        loan.loanUser = user;
         return res.json(loan);
       });
   } catch (error) {

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const loanSchema = new mongoose.Schema(
   {
-    borrowerId: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
