@@ -17,7 +17,7 @@ exports.register = async (req, res, next) => {
         } else {
           bcrypt
             .hash(req.body.password, 8)
-            .then((hashedPassword) => {
+            .then(async (hashedPassword) => {
               const newUser = new User({
                 email: req.body.email,
                 password: hashedPassword,
