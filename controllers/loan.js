@@ -5,11 +5,12 @@ const { createBorrowerHelper } = require("../helpers/borrower");
 exports.createLoan = async (req, res) => {
   try {
     const reqLoanDetails = req.body;
+    console.log(reqLoanDetails);
     const borrower = await createBorrowerHelper(req.user._id);
     const newLoan = new Loan({
       userId: req.user._id,
       loanBlockchainStorageAccountPubkey:
-        reqLoanDetails.loan_blockchain_storage_account_pubkey,
+        reqLoanDetails.loanBlockchainStorageAccountPubkey,
       loanAmount: reqLoanDetails.loanAmount,
       amountLeft: reqLoanDetails.loanAmount,
       duration: reqLoanDetails.duration,
@@ -79,6 +80,7 @@ exports.getLoanById = async (req, res) => {
       .select("-photo -createdAt -updatedAt -__v")
       .lean()
       .then(async (loan) => {
+        console.log(loan);
         const user = await User.findById(loan.userId)
           .select("fullName income occupation bio")
           .lean();

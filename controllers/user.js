@@ -19,6 +19,7 @@ exports.register = async (req, res, next) => {
             .hash(req.body.password, 8)
             .then(async (hashedPassword) => {
               const newUser = new User({
+                fullName: req.body.fullName,
                 email: req.body.email,
                 password: hashedPassword,
               });
