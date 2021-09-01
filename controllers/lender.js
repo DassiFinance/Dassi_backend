@@ -33,6 +33,7 @@ exports.lendAmount = async (req, res, next) => {
     const lender = await createLenderHelper(req.user._id);
     const loan = await Loan.findById(req.body.loanId);
 
+    req.body.amount = parseInt(req.body.amount);
     if (req.body.amount <= 0) {
       return res
         .status(400)
