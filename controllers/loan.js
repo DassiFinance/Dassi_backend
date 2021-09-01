@@ -8,6 +8,8 @@ exports.createLoan = async (req, res) => {
     const borrower = await createBorrowerHelper(req.user._id);
     const newLoan = new Loan({
       userId: req.user._id,
+      loanBlockchainStorageAccountPubkey:
+        reqLoanDetails.loan_blockchain_storage_account_pubkey,
       loanAmount: reqLoanDetails.loanAmount,
       amountLeft: reqLoanDetails.loanAmount,
       duration: reqLoanDetails.duration,
