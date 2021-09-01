@@ -38,6 +38,7 @@ var userSchema = new Schema(
     },
     lenderBlockchainId: {
       type: String,
+      required: true,
     },
     totalAmountLent: {
       type: Number,

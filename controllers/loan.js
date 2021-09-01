@@ -1,7 +1,6 @@
 const Loan = require("../models/loan");
 const User = require("../models/user");
 const { createBorrowerHelper } = require("../helpers/borrower");
-const { getNextLenderBlockchainId } = require("../helpers/lender");
 
 exports.createLoan = async (req, res) => {
   try {
@@ -27,9 +26,6 @@ exports.createLoan = async (req, res) => {
     borrower.save();
     // Incrementing the user's loan count
     req.user.numberOfLoansApplied++;
-    if (!req.user.lenderBlockchainId) {
-      req.user.lenderBlockchainId = await getNextLenderBlockchainId();
-    }
     req.user.save();
 
     newLoan.photo = undefined;

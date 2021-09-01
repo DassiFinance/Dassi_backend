@@ -2,6 +2,8 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { jwtExpiresIn, jwtSecret } = require("../config/keys");
+const { getNextLenderBlockchainId } = require("../helpers/lender");
+
 /**
  *  Creates a new User
  */
@@ -20,6 +22,7 @@ exports.register = async (req, res, next) => {
                 email: req.body.email,
                 password: hashedPassword,
               });
+              newUser.lenderBlockchainId = await getNextLenderBlockchainId();
 
               const token = jwt.sign({ _id: newUser._id }, jwtSecret, {
                 expiresIn: jwtExpiresIn,
