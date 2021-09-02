@@ -6,7 +6,6 @@ const { reverse } = require("dns");
 exports.createLoan = async (req, res) => {
   try {
     const reqLoanDetails = req.body;
-    console.log(reqLoanDetails);
     const borrower = await createBorrowerHelper(req.user._id);
     const newLoan = new Loan({
       userId: req.user._id,
