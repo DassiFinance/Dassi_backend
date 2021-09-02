@@ -1,6 +1,7 @@
 const Loan = require("../models/loan");
 const User = require("../models/user");
 const { createBorrowerHelper } = require("../helpers/borrower");
+const { reverse } = require("dns");
 
 exports.createLoan = async (req, res) => {
   try {
@@ -41,7 +42,11 @@ exports.displayActiveLoans = async (req, res, next) => {
   try {
     Loan.find()
       .select("-photo -createdAt -updatedAt -__v")
-      .then((loans) => res.json(loans));
+      .lean()
+      .then((loans) => {
+        loans.reverse();
+        res.send(loans);
+      });
   } catch (error) {
     res.status(400).json({ error, message: "Could not get active loans" });
   }
@@ -51,7 +56,11 @@ exports.displayActiveLoansWithFilter = async (req, res, next) => {
   try {
     Loan.find(req.params)
       .select("-photo -createdAt -updatedAt -__v")
-      .then((loans) => res.json(loans));
+      .lean()
+      .then((loans) => {
+        loans.reverse();
+        res.send(loans);
+      });
   } catch (error) {
     console.log(error);
     res.status(400).json({ error, message: "Could not get active loans" });
@@ -80,7 +89,6 @@ exports.getLoanById = async (req, res) => {
       .select("-photo -createdAt -updatedAt -__v")
       .lean()
       .then(async (loan) => {
-        console.log(loan);
         const user = await User.findById(loan.userId)
           .select("fullName income occupation bio")
           .lean();
