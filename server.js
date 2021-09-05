@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 // Importing routes
 const userRouter = require("./routes/user");
-const borrowerRouter = require("./routes/borrower");
+const borrowerRouter = require("./routes/Borrower");
 const lenderRouter = require("./routes/lender");
 const loanRouter = require("./routes/loan");
 const categoryRouter = require("./routes/category");
